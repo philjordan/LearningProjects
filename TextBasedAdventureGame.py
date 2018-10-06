@@ -13,10 +13,29 @@ W   game room      lounge         butlers pantry   E
                    exit 
                      S   
 wall between study and game room.  Wall between lounge and butlers pantry.  can't go outside the box with the exception of the exit.
+
+add random insults
+
+add the ability to pick up and drop items
+
+make the goal to make pancakes
 '''
 from unicodedata import bidirectional
 x_cord=0
 y_cord=1
+
+wall="You ran into a wall."
+
+studyItems = ["hat", "coat", "milk"]
+mainHallItems= ['cat', 'phone', 'baking soda']
+sittingRoomItems=['empty wine glass', 'eggs']
+gameRoomItems=['skillet', 'poker chips']
+lougeItems=['butter', 'fedora']
+butlersPantryItems = ['flour', 'thin mints']
+familyRoomItems = ['remote control', 'salt' ]
+dingingRoomItems = ['sugar', 'chair']
+kitchenItems = ['wine']
+myItems = []
 
 
 room01description = "You have entered the main hall.  To the north of you is the lounge, to the east the sitting room, to the west the study.  To your south is the exit."
@@ -54,69 +73,93 @@ def roomlocation (x_cord, y_cord):
 
 #function to update the x and y coordinates based on where you selected to move
 def move (direction, x_cord, y_cord):
-    if x_cord == 0 and y_cord == 1 and direction == 'S':
+    if x_cord == 0 and y_cord == 1 and direction == 's':
         while True:
             message = input("You have exited the house.  Are you sure you want to leave? Y/N ")
-            if message == "Y":
+            message = message.lower()
+            if message == "y":
                 exit()
-            elif message =="N":
+            elif message =="n":
                 return (x_cord, y_cord)
                 break
             else:
                 continue
-    elif direction == 'N':
+    elif direction == 'n':
         if x_cord == 2:
-            print("You ran into a wall.")
+            print(wall)
         else:
             x_cord = x_cord+1
-            y_cord = y_cord
         return (x_cord, y_cord)
-    elif direction == 'E':
+    elif direction == 'e':
         if y_cord == 2:
-            print("You ran into a wall.")
+            print(wall)
         else:
-            x_cord = x_cord
             y_cord += 1
         return (x_cord, y_cord)
-    elif direction == 'S':
+    elif direction == 's':
         if x_cord == 0:
-            print("You ran into a wall.")
+            print(wall)
         else:
             x_cord -=1
-            y_cord = y_cord
         return (x_cord, y_cord)
     else:
         if y_cord == 0:
-            print("You ran into a wall.")
+            print(wall)
         else:
-            x_cord = x_cord
             y_cord -=1
         return (x_cord, y_cord)
-        
+       
+#function to look around the room and find what is there
+def look (x_cord, y_cord):
+    if x_cord==0 and y_cord==0:
+        return (", ".join(studyItems))
+    elif x_cord==0 and y_cord==1:
+        return(", ".join(mainHallItems))
+    elif x_cord==0 and y_cord==2:
+        return(", ".join(sittingRoomItems))
+    elif x_cord==1 and y_cord==0:
+        return(", ".join(gameRoomItems))
+    elif x_cord==1 and y_cord==1:
+        return(", ".join(lougeItems))
+    elif x_cord==1 and y_cord==2:
+        return(", ".join(butlersPantryItems))
+    elif x_cord==2 and y_cord==0:
+        return(", ".join(familyRoomItems))
+    elif x_cord==2 and y_cord==1:
+        return(", ".join(dingingRoomItems))
+    else:
+        return(", ".join(kitchenItems))
+    
+'''
+#function to define what is in a room
+def pickup (x_cord, y_cord):
+    roomlocation(x_cord, y_cord)
+    
+
+#function to define what is on our person
+#allowed to check inventor, add to it or drop something.  Max objects to hold is two
+def holding (action):
+'''   
 
 while x_cord>=0: 
     roomlocation(x_cord, y_cord)
-    direction = input("Where would you like to go? ")
+    while True:
+        direction = input("Where would you like to go? ")
+        direction=direction.lower()
+        valid_direction = {'n', 's', 'e', 'w'}
+        if direction in valid_direction:
+            break
+        elif direction == "look":
+            items = look(x_cord,y_cord)
+            print("The room contains: " + items)
+        else:
+            print ("Invalid entry.")
+            continue
     x_cord,y_cord = move(direction, x_cord, y_cord)
 
 
-
 '''
-#need to find a way to exit when the coordinates are 0,-1
-leave = 'N'
-while leave != 'N':
-    message = 'N'
-    if x_cord == -1 and y_cord == 1:
-        while message != "N":
-            message = input("You have exited the house.  Are you sure you want to leave? Y/N ")
-            if message == 'Y':
-                print("Goodbye!")
-                exit()
-            elif message == "N":
-                x_cord += 1
-                print(x_cord)
-                print(y_cord)
-            else:
-                print("Invalid Entry.  Try again.")
-                message = 'Y'
+create a list of actions people can take (move, look, pickup, drop)
+have the user input what he wants to do and then compare that to my list of actions
+if the input in contained in my actions list, 
 '''

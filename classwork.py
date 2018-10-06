@@ -3,12 +3,8 @@ Created on Sep 29, 2018
 
 @author: Phil
 '''
-from audioop import reverse
+student = {'name': 'Anna','age':'22', 'courses':['calculus', 'compsci']}
 
-
-def f(x):
-  y0 = x + 1
-  y1 = x * 3
-  y2 = y0 ** y3
-  return (y0,y1,y2)
-  
+print(student['name'])
+print(student['age'])
+print(student['courses'])
