@@ -72,7 +72,7 @@ def roomlocation (x_cord, y_cord):
         print("We shouldn't be here")
 
 #function to update the x and y coordinates based on where you selected to move
-def move (direction, x_cord, y_cord):
+def go (direction, x_cord, y_cord):
     if x_cord == 0 and y_cord == 1 and direction == 's':
         while True:
             message = input("You have exited the house.  Are you sure you want to leave? Y/N ")
@@ -129,6 +129,49 @@ def look (x_cord, y_cord):
         return(", ".join(dingingRoomItems))
     else:
         return(", ".join(kitchenItems))
+
+def drop (item, x_cord, y_cord):
+    myItems.remove(item)
+    if x_cord==0 and y_cord==0:
+        studyItems.append(item)
+    elif x_cord==0 and y_cord==1:
+        mainHallItems.append(item)
+    elif x_cord==0 and y_cord==2:
+        sittingRoomItems.append(item)
+    elif x_cord==1 and y_cord==0:
+        gameRoomItems.append(item)
+    elif x_cord==1 and y_cord==1:
+        lougeItems.append(item)
+    elif x_cord==1 and y_cord==2:
+        butlersPantryItems.append(item)
+    elif x_cord==2 and y_cord==0:
+        familyRoomItems.append(item)
+    elif x_cord==2 and y_cord==1:
+        dingingRoomItems.append(item)
+    else:
+        kitchenItems.append(item)
+
+def pickup (item, x_cord, y_cord):
+    myItems.append(item)
+    if x_cord==0 and y_cord==0:
+        studyItems.remove(item)
+    elif x_cord==0 and y_cord==1:
+        mainHallItems.remove(item)
+    elif x_cord==0 and y_cord==2:
+        sittingRoomItems.remove(item)
+    elif x_cord==1 and y_cord==0:
+        gameRoomItems.remove(item)
+    elif x_cord==1 and y_cord==1:
+        lougeItems.remove(item)
+    elif x_cord==1 and y_cord==2:
+        butlersPantryItems.remove(item)
+    elif x_cord==2 and y_cord==0:
+        familyRoomItems.remove(item)
+    elif x_cord==2 and y_cord==1:
+        dingingRoomItems.remove(item)
+    else:
+        kitchenItems.remove(item)
+
     
 '''
 #function to define what is in a room
@@ -140,26 +183,57 @@ def pickup (x_cord, y_cord):
 #allowed to check inventor, add to it or drop something.  Max objects to hold is two
 def holding (action):
 '''   
-
+actions=["go", "look", "pickup", "drop", "insult", "help"]
+print('While walking down the road, you randomly decide to enter a small house you see.' '\n'
+      'Enter "go" to move, "look" to see what is in each room,' '\n'
+      '"pickup" to grab objects, "drop" to drop objects,' '\n'
+      'and "help" to repeat these instructions.' '\n')
 while x_cord>=0: 
     roomlocation(x_cord, y_cord)
     while True:
-        direction = input("Where would you like to go? ")
-        direction=direction.lower()
-        valid_direction = {'n', 's', 'e', 'w'}
-        if direction in valid_direction:
-            break
-        elif direction == "look":
-            items = look(x_cord,y_cord)
-            print("The room contains: " + items)
+        action = input("What would you like to do? ")
+        action = action.lower()
+        if action in actions:
+            if action == "go":
+                direction = input("Where would you like to go? (N, S, E, or W)")
+                direction=direction.lower()
+                valid_direction = {'n', 's', 'e', 'w'}
+                if direction in valid_direction:
+                    break
+                else:
+                    continue
+            elif action == "look":
+                    items = look(x_cord,y_cord)
+                    print("The room contains: " + items)
+            elif action == "pickup":
+                    topickup = input("What would you like to pickup? ")
+                    topickup = topickup.lower()
+                    if topickup in look(x_cord, y_cord):
+                        #myItems.append(topickup)
+                        pickup(topickup, x_cord, y_cord)
+                        print("My items are:")
+                        print(*myItems, sep = ", ")
+                        print(look(x_cord, y_cord))
+                        #drop(topickup,x_cord, y_cord)
+                    else:
+                        print("I don't see that in this room.")
+            elif action == "drop":
+                if len(myItems) == 0:
+                        print("Your hands are empty")
+                elif:
+                    todrop = input("What would you like to drop? ")
+                    todrop = todrop.lower()
+                    if todrop in myItems:
+                        drop(todrop, x_cord, y_cord)
+                    else:
+                        print("You aren't holding that item.")
+                    #else:
+                        #print(*myItems, sep = ", ")
+            elif action == "help":
+                print('Enter "go" to move, "look" to see what is in each room,' '\n'
+                      '"pickup" to grab objects, "drop" to drop objects,' '\n'
+                      'and "help" to repeat these instructions.' '\n')
         else:
             print ("Invalid entry.")
             continue
-    x_cord,y_cord = move(direction, x_cord, y_cord)
-
-
-'''
-create a list of actions people can take (move, look, pickup, drop)
-have the user input what he wants to do and then compare that to my list of actions
-if the input in contained in my actions list, 
-'''
+    x_cord,y_cord = go(direction, x_cord, y_cord)
